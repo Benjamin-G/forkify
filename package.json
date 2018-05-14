@@ -1,12 +1,16 @@
 {
-  "name": "9-forkify-starter",
+  "name": "Forkify",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/Benjamin-G/forkify.git",
   "author": "Benjamin Geyer <brgeyer49@gmail.com>",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
   "devDependencies": {
-    "webpack": "^4.8.3"
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3"
   }
 }
