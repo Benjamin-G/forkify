@@ -13,4 +13,4 @@ webpack and yarn
 
 ## Acknowledgments
 
-* Jonas Schmedtmann for design and cours
+* Jonas Schmedtmann for design and course
