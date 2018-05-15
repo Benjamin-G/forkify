@@ -1,3 +1,3 @@
 console.log('imported module')
 
-export default 22
+export default { name : 'Benjamin' }
