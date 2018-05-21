@@ -1,4 +1,7 @@
 // Global app controller
-import x from './test'
+import obj from './test'
 
-console.log(`I imported ${x} from another file `)
+
+const name = obj.name
+
+console.log(`I imported ${name} from another file `)
