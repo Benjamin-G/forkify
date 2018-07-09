@@ -1,7 +1,7 @@
 // Global app controller
 import Search from './models/Search'
 import * as searchView from './views/searchView'
-import { elements } from './views/base'
+import { elements, renderLoader, clearLoader } from './views/base'
 
 /** Global state of the app
  * -search object
@@ -12,8 +12,8 @@ import { elements } from './views/base'
 
 const state = {}
 
+//Control Search
 const controlSearch = async () => {
-  // get query TODO
   const query = searchView.getInput()
   console.log(query)
 
@@ -24,11 +24,13 @@ const controlSearch = async () => {
     // prepare UI for results
     searchView.clearInput()
     searchView.clearResults()
+    renderLoader(elements.searchResult)
 
     // search for recipes
     await state.search.getResults()
 
     // render results in UI
+    clearLoader()
     searchView.renderResults(state.search.result)
   }
 }
@@ -38,3 +40,14 @@ elements.searchForm.addEventListener('submit', e => {
   controlSearch()
 })
 
+//Control pagination button
+elements.serachResPages.addEventListener('click', e => {
+  //Handles click anywhere on target button
+  const btn = e.target.closest('.btn-inline')
+  if(btn) {
+    // <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
+    const goToPage = parseInt(btn.dataset.goto, 10) 
+    searchView.clearResults()
+    searchView.renderResults(state.search.result, goToPage)
+  }
+})
