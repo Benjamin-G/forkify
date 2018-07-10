@@ -18,7 +18,6 @@ const state = {}
  */
 const controlSearch = async () => {
   const query = searchView.getInput()
-  console.log(query)
 
   if(query){
     // add search object to state
@@ -30,11 +29,17 @@ const controlSearch = async () => {
     renderLoader(elements.searchResult)
 
     // search for recipes
-    await state.search.getResults()
+    try{
+      await state.search.getResults()
 
-    // render results in UI
-    clearLoader()
-    searchView.renderResults(state.search.result)
+      // render results in UI
+      clearLoader()
+      searchView.renderResults(state.search.result)
+    }catch (err) {
+      alert('Something wrong with the search')
+      clearLoader()
+    }
+    
   }
 }
 
@@ -61,9 +66,30 @@ elements.serachResPages.addEventListener('click', e => {
  * Recipe Controller 
  * grabs the hash(id) then uses that information for an async call to the API
  */
-const controlRecipe = () => {
-  const id = window.location.hash
-  console.log(id)
-}
+const controlRecipe = async () => {
+  //Get id from URL
+  const id = window.location.hash.replace('#', '')
+  
+  if(id){
+    //Prepare UI for changes
 
-window.addEventListener('hashchange', controlRecipe)
+    //Create new recipe object
+    state.recipe = new Recipe(id)
+
+    try {
+      //Get recipe data
+      await state.recipe.getRecipe()
+  
+      //Calc servings and time
+      state.recipe.calcTime()
+      state.recipe.calcServings()
+  
+      //Render recipe
+      console.log(state.recipe)
+    }catch (err) {
+      alert('Error incorrect ID')
+    }
+  }
+}
+//when hash is changed and page is loaded(saved bookmark)
+['hashchange','load'].forEach(event => window.addEventListener(event, controlRecipe))
