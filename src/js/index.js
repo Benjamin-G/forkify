@@ -1,5 +1,6 @@
 // Global app controller
 import Search from './models/Search'
+import Recipe from './models/Recipe'
 import * as searchView from './views/searchView'
 import { elements, renderLoader, clearLoader } from './views/base'
 
@@ -12,7 +13,9 @@ import { elements, renderLoader, clearLoader } from './views/base'
 
 const state = {}
 
-//Control Search
+/** 
+ * Search Controller 
+ */
 const controlSearch = async () => {
   const query = searchView.getInput()
   console.log(query)
@@ -51,3 +54,16 @@ elements.serachResPages.addEventListener('click', e => {
     searchView.renderResults(state.search.result, goToPage)
   }
 })
+
+
+
+/** 
+ * Recipe Controller 
+ * grabs the hash(id) then uses that information for an async call to the API
+ */
+const controlRecipe = () => {
+  const id = window.location.hash
+  console.log(id)
+}
+
+window.addEventListener('hashchange', controlRecipe)
