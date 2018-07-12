@@ -6,7 +6,9 @@ import Likes from './models/Likes'
 import * as searchView from './views/searchView'
 import * as recipeView from './views/recipeView'
 import * as listView from './views/listView'
+import * as likesView from './views/likesView'
 import { elements, renderLoader, clearLoader } from './views/base'
+import { windowWhen } from 'rxjs/operators';
 
 /** Global state of the app
  * -search object
@@ -102,7 +104,7 @@ const controlRecipe = async () => {
   
       //Render recipe
       clearLoader()
-      recipeView.renderRecipe(state.recipe)
+      recipeView.renderRecipe(state.recipe, state.likes.isLiked(id))
     }catch (err) {
       clearLoader()
       console.log('Error with recipe')
@@ -148,6 +150,9 @@ elements.shopping.addEventListener('click', e => {
 /** 
  * Like Controller 
  */
+//TESTING
+ state.likes = new Likes()
+ likesView.toggleLikeMenu(state.likes.getNumberOfLikes())
 
  const controlLike = () => {
   if(!state.likes) state.likes = new Likes()
@@ -157,7 +162,7 @@ elements.shopping.addEventListener('click', e => {
   //Initial like on current recipe
   if(!state.likes.isLiked(currentId)){
     //add like to state
-    state.likes.addLike(
+    const newLike = state.likes.addLike(
       currentId,
       state.recipe.title,
       state.recipe.author,
@@ -165,18 +170,37 @@ elements.shopping.addEventListener('click', e => {
     )
 
     //toggle button
+    likesView.toggleLikeBtn(true)
 
     //add to ui list
-    console.log(state.likes)
+    likesView.renderLike(newLike)
+    
   } else {
     //remove like to state
     state.likes.deleteLike(currentId)
+
     //toggle button
+    likesView.toggleLikeBtn(false)
 
     //remove to ui list
-    console.log(state.likes)
+    likesView.deleteLike(currentId)
   }
+  likesView.toggleLikeMenu(state.likes.getNumberOfLikes())
  }
+
+ // Restore liked recipes on page load
+ window.addEventListener('load', _ => {
+   state.likes = new Likes()
+
+   //restore likes
+   state.likes.readStorage()
+
+   //toggle like menu button
+   likesView.toggleLikeMenu(state.likes.getNumberOfLikes())
+
+   //render existing likes
+   state.likes.likes.forEach(like => likesView.renderLike(like))
+ })
 
 
 //handling recipe button clicks

@@ -1,5 +1,4 @@
 import { elements } from './base'
-import { elementAt } from 'rxjs/operators';
 
 export const getInput = () => elements.searchInput.value
 
@@ -20,7 +19,7 @@ export const highlightedSelected = id => {
 }
 
 //Reduce the title length to a single line
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
   const newTitle = []
 
   if(title.length > limit){
