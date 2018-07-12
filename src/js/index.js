@@ -1,7 +1,8 @@
 // Global app controller
 import Search from './models/Search'
 import Recipe from './models/Recipe'
-import List from './models/List'
+import List from './models/List' 
+import Likes from './models/Likes' 
 import * as searchView from './views/searchView'
 import * as recipeView from './views/recipeView'
 import * as listView from './views/listView'
@@ -19,6 +20,7 @@ const state = {}
 /** 
  * Search Controller 
  */
+
 const controlSearch = async () => {
   const query = searchView.getInput()
 
@@ -71,6 +73,7 @@ elements.serachResPages.addEventListener('click', e => {
  * Recipe Controller 
  * grabs the hash(id) then uses that information for an async call to the API
  */
+
 const controlRecipe = async () => {
   //Get id from URL
   const id = window.location.hash.replace('#', '')
@@ -140,9 +143,41 @@ elements.shopping.addEventListener('click', e => {
     const val = parseFloat(e.target.value)
     state.list.updateCount(id, val)
   }
-
-
 })
+
+/** 
+ * Like Controller 
+ */
+
+ const controlLike = () => {
+  if(!state.likes) state.likes = new Likes()
+
+  const currentId = state.recipe.id
+
+  //Initial like on current recipe
+  if(!state.likes.isLiked(currentId)){
+    //add like to state
+    state.likes.addLike(
+      currentId,
+      state.recipe.title,
+      state.recipe.author,
+      state.recipe.img
+    )
+
+    //toggle button
+
+    //add to ui list
+    console.log(state.likes)
+  } else {
+    //remove like to state
+    state.likes.deleteLike(currentId)
+    //toggle button
+
+    //remove to ui list
+    console.log(state.likes)
+  }
+ }
+
 
 //handling recipe button clicks
 elements.recipe.addEventListener('click', e => {
@@ -155,6 +190,8 @@ elements.recipe.addEventListener('click', e => {
     recipeView.updateServingsIngredients(state.recipe)
   } else if(e.target.matches('.recipe__btn--add, .recipe__btn--add *')){
     controlList()
+  } else if(e.target.matches('.recipe__love, .recipe__love *')) {
+    controlLike()
   }
  
 
