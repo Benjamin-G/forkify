@@ -1,7 +1,6 @@
 import { Fraction } from 'fractional'
 
 import { elements } from './base'
-import { format } from 'url';
 
 export const clearRecipe = () => {
   elements.recipe.innerHTML=''
