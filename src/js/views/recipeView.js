@@ -65,6 +65,7 @@ export const renderRecipe = (recipe, isLiked = true) => {
             <span class="recipe__info-data recipe__info-data--minutes">${recipe.time}</span>
             <span class="recipe__info-text"> minutes</span>
         </div>
+        
         <div class="recipe__info">
             <svg class="recipe__info-icon">
                 <use href="img/icons.svg#icon-man"></use>
